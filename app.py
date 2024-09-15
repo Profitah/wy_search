@@ -13,6 +13,7 @@ CORS(app)
 GOOGLE_API_KEY = os.getenv('USER_GOOGLE_API_KEY')
 OPENAI_API_KEY = os.getenv('USER_OPENAI_API_KEY')
 CX = os.getenv('USER_CX')
+
 openai.api_key = OPENAI_API_KEY 
 
 # 이전에 반환된 이미지 URL을 저장하여 중복된 이미지가 반환되지 않도록 하는 리스트
@@ -33,8 +34,8 @@ def get_search_term(command):
             messages=[
                 {"role": "user", "content": f"{command}"},
             ],
-            max_tokens=800, # max_tokens를 800으로 수정
-            temperature=2.0, # temperature를 2.0으로 수정
+            max_tokens=400, # max_tokens를 400으로 수정
+            temperature=0.75, # temperature를 0.75으로 수정
         )
 
         responses = response['choices'][0]['message']['content'].strip()
@@ -59,7 +60,7 @@ def get_image(search_term):
                 'cx': CX,
                 'q': search_term, 
                 'searchType': 'image',
-                'num': 3  # 개선된 api 호출을 위해 3개로 수정 
+                'num': 3   
             }
         )
         # 응답이 성공하면 이미지 URL을 반환
