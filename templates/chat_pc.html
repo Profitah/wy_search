@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with Flask</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background-color: #1F1E1E;
+        }
+
+        .header {
+            width: 100%;
+            text-align: left;
+            padding: 10px;
+            background-color: #8EBD54;
+            color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .chat-container {
+            width: 100%;
+            max-width: 90%;
+            margin: 0 auto;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #1F1E1E;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            bottom: 0;
+            position: absolute;
+        }
+
+        .form-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #8EBD54;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
+            margin-bottom: 10px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .message {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #f1f1f1;
+            border-radius: 8px;
+            max-width: 80%;
+        }
+
+        .user-message {
+            background-color: #8EBD54;            
+            width: 60vw;
+            text-align: right;
+            position: relative;
+            left: 28vw;
+        }
+
+        .user-message p{
+            
+        }
+
+        .friend-message {
+            align-self: flex-start;
+            background-color: #f1f1f1;
+            width: 80vw; /* 너비를 60%로 설정 */
+            text-align: left; /* 텍스트를 왼쪽 정렬 */
+        }
+
+        .image-container img {
+            width: 280px;
+            height: 350px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+        function resetInput() {
+            // 잠시 후 입력 필드를 초기화하기 위해 setTimeout 사용
+            setTimeout(function() {
+                document.getElementById('command').value = '';
+            }, 100);
+        }
+    </script>
+</head>
+<body>
+    <div class="header">
+        <h1>Chat with Flask</h1>
+    </div>
+
+    <div class="chat-container">
+        {% if command %}
+        <div class="message user-message">
+            <p>{{ command }}</p>
+        </div>
+        {% endif %}
+
+        {% if image_url %}
+            <div class="message friend-message image-container">
+                <h3>친구1</h3>
+                <img src="{{ image_url }}" alt="Search Result Image">
+            </div>
+        {% elif error %}
+            <div class="message friend-message">
+                <h3>친구1</h3>
+                <p>{{ error }}</p>
+            </div>
+        {% endif %}
+
+        <form method="POST" class="form-container" onsubmit="resetInput()">
+            <input type="text" id="command" name="command" placeholder="Please enter your message"required>
+            <button type="submit">Send</button>
+        </form>
+    </div>
+</body>
+</html>
