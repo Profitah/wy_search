@@ -21,7 +21,7 @@ previous_image_urls = []
 
 # 키워드에 따라 반환 값이 달라지는 함수
 def keyword_check(command):
-    if '원영' in command:
+    if '원영' in command and '사진' in command:
         return '장원영'
     else:
         return get_search_term(command)
@@ -58,30 +58,32 @@ def get_image(search_term):
             params={
                 'key': GOOGLE_API_KEY,
                 'cx': CX,
-                'q': search_term, 
+                'q': search_term.strip(),
                 'searchType': 'image',
-                'num': 3   
+                'num': 10
             }
         )
         # 응답이 성공하면 이미지 URL을 반환
-        if response.status_code == 200: 
+        if response.status_code == 200:
             data = response.json()
             items = data.get('items', [])
-            if items: 
+            if items:
                 for item in items:
                     image_url = item['link']
-        
                     if image_url not in previous_image_urls:
-                        previous_image_urls.append(image_url) 
-                        return image_url 
-            else: 
-                return get_image(search_term) 
-            print(f"Google API 요청 실패: {response.status_code}, {response.text}")
-            return None
+                        previous_image_urls.append(image_url)
+                        return image_url
+                
+                # 더 이상 반환할 이미지가 없을 때
+                return get_image(search_term) #재귀 호출을 사용해 다시 get요청을 보내고, 다른 이미지를 찾음. 구글애서 이미지를 찾을 수 없을 때까지 반복
+            else:
+                print(f"Google API 요청 실패: {response.status_code}, {response.text}")
+                return None
 
     except requests.RequestException as e:
         print(f"Google API 요청 중 오류 발생: {str(e)}")
         return None
+
 
 # 라우트 함수 정의.  get, post 메소드 사용
 @app.route('/', methods=['GET', 'POST'])
