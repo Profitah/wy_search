@@ -21,7 +21,7 @@ previous_image_urls = []
 
 # 키워드에 따라 반환 값이 달라지는 함수
 def keyword_check(command):
-    if '원영' in command:
+    if '원영' in command and '사진' in command:
         return '장원영'
     else:
         return get_search_term(command)
